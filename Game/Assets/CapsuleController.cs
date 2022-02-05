@@ -2,27 +2,46 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SphereControlScript : MonoBehaviour
+public class CapsuleControlScript : MonoBehaviour,IInteractable,ITouchController
 {
     Renderer my_renderer;
     bool is_selected = false;
-    IInteractable selected_object;
+
     // Start is called before the first frame update
     void Start()
     {
+
         my_renderer = GetComponent<Renderer>();
+
 
     }
 
     // Update is called once per frame
     void Update()
     {
+
+
+
+    }
+
+    public void collision()
+    {
+        print("COLLIDED");
+    }
+    //This is to change colour when selected - this needs to be automatically switched off when deselected
+    public void select_toggle()
+    {
         is_selected = !is_selected;
 
         if (is_selected)
-            my_renderer.material.color = Color.yellow;
+            my_renderer.material.color = Color.red;
         else
             my_renderer.material.color = Color.white;
+
+    }
+    public void changeColour()
+    {
+        selectedObjectColour.material.SetColor("_Color", color);
 
     }
 }

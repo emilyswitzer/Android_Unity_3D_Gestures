@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CubeControl : MonoBehaviour, IInteractable, ITouchController
+public class CubeControl : MonoBehaviour,IInteractable
 {
     Renderer my_renderer;
     bool is_selected = false;

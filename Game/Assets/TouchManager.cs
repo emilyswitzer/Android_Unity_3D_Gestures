@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TouchManagerScript : MonoBehaviour, ITouchController
+public class SampleTouchManagerScript : MonoBehaviour, ITouchController, IInteractable
 {
     private float tap_timer;
     private bool has_moved;
@@ -45,7 +45,7 @@ public class TouchManagerScript : MonoBehaviour, ITouchController
     // Start is called before the first frame update
     void Start()
     {
-         managers = FindObjectsOfType<MonoBehaviour>().OfType<ITouchController>().ToArray();
+        //  managers = FindObjectsOfType<MonoBehaviour>().OfType<ITouchController>().ToArray();
 
     }
 

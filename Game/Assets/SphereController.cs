@@ -1,9 +1,8 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CubeControl : MonoBehaviour, IInteractable, ITouchController
+public class SphereControlScript : MonoBehaviour, IInteractable, ITouchController
 {
     Renderer my_renderer;
     bool is_selected = false;
@@ -20,9 +19,9 @@ public class CubeControl : MonoBehaviour, IInteractable, ITouchController
     // Update is called once per frame
     void Update()
     {
-     
-         
-        
+
+
+
     }
 
     public void collision()
@@ -45,7 +44,4 @@ public class CubeControl : MonoBehaviour, IInteractable, ITouchController
         selectedObjectColour.material.SetColor("_Color", color);
 
     }
-
-  
-    
 }
