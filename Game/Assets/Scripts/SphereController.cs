@@ -3,16 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CubeControl : MonoBehaviour,IInteractable
+public class SphereController : MonoBehaviour, IInteractable
 {
     Renderer my_renderer;
-    bool is_selected = false;
-
     // Start is called before the first frame update
     void Start()
     {
 
         my_renderer = GetComponent<Renderer>();
+        my_renderer.material.SetColor("_Color", Color.black);
 
 
     }
@@ -20,9 +19,9 @@ public class CubeControl : MonoBehaviour,IInteractable
     // Update is called once per frame
     void Update()
     {
-     
-         
-        
+
+
+
     }
 
     public void collision()
@@ -30,22 +29,14 @@ public class CubeControl : MonoBehaviour,IInteractable
         print("COLLIDED");
     }
     //This is to change colour when selected - this needs to be automatically switched off when deselected
-    public void select_toggle()
+    public void select_toggle(Color color)
     {
-        is_selected = !is_selected;
+        my_renderer.material.SetColor("_Color", color);
 
-        if (is_selected)
-            my_renderer.material.color = Color.red;
-        else
-            my_renderer.material.color = Color.white;
 
-    }
-    public void changeColour()
-    {
-        selectedObjectColour.material.SetColor("_Color", color);
+
 
     }
 
-  
-    
+
 }

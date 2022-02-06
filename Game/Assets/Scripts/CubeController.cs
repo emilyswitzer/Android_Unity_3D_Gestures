@@ -1,11 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CapsuleControlScript : MonoBehaviour,IInteractable,ITouchController
+public class CubeController : MonoBehaviour,IInteractable
 {
     Renderer my_renderer;
-    bool is_selected = false;
 
     // Start is called before the first frame update
     void Start()
@@ -19,9 +19,9 @@ public class CapsuleControlScript : MonoBehaviour,IInteractable,ITouchController
     // Update is called once per frame
     void Update()
     {
-
-
-
+     
+         
+        
     }
 
     public void collision()
@@ -29,19 +29,15 @@ public class CapsuleControlScript : MonoBehaviour,IInteractable,ITouchController
         print("COLLIDED");
     }
     //This is to change colour when selected - this needs to be automatically switched off when deselected
-    public void select_toggle()
+    public void select_toggle(Color color)
     {
-        is_selected = !is_selected;
 
-        if (is_selected)
-            my_renderer.material.color = Color.red;
-        else
-            my_renderer.material.color = Color.white;
+        my_renderer.material.SetColor("_Color", color);
+
+
 
     }
-    public void changeColour()
-    {
-        selectedObjectColour.material.SetColor("_Color", color);
 
-    }
+
+
 }
