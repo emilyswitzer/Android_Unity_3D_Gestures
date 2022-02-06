@@ -4,5 +4,6 @@ using UnityEngine;
 
 public interface IInteractable 
 {
-    void select_toggle();
+    void select_toggle(Color color);
+    void collision();
 }
