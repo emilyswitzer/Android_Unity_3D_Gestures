@@ -6,42 +6,60 @@ using System.Linq;
 
 public class TouchManager : MonoBehaviour, ITouchController
 {
-    private float tap_timer;
-    private bool has_moved = false;
-    private float MAX_ALLOWED_TAP_TIME = 0.2f;
     IInteractable selected_object;
-    private float dist;
-    public Vector2 startPos;
-    private Vector2 direction;
+    float starting_distance_to_selected_object;
+    bool drag_started = false;
+    private float tap_timer;
+    private bool has_moved;
+    private float MAX_ALLOWED_TAP_TIME = 0.2f;
+
     ITouchController[] managers;
     public void drag(Vector2 current_position)
     {
-        print("Im the manager and I recieved a drag from gesture");
 
-        Ray our_ray = Camera.main.ScreenPointToRay(current_position);
-        Debug.DrawRay(our_ray.origin, our_ray.direction * 50, Color.red, 4f);
-        RaycastHit hit_info;
-        if (Physics.Raycast(our_ray, out hit_info))
+        Ray ourRay = Camera.main.ScreenPointToRay(current_position);
+
+        Debug.DrawRay(ourRay.origin, 30 * ourRay.direction);
+
+
+        if (selected_object != null)
         {
-            IInteractable the_object = hit_info.transform.GetComponent<IInteractable>();
-            selected_object = the_object;
 
-            if (the_object is CubeController)
+            if (!drag_started)
             {
-     
-                the_object.select_toggle(Color.cyan);
 
-            }
-            else if (the_object is SphereController)
-            {
-                the_object.select_toggle(Color.magenta);
-
+                starting_distance_to_selected_object = Vector3.Distance(Camera.main.transform.position, (selected_object as MonoBehaviour).transform.position);
+                drag_started = true;
             }
 
-            else if (the_object is CapsuleController)
+            Ray new_positional_ray = Camera.main.ScreenPointToRay(current_position);
+
             {
-                the_object.select_toggle(Color.yellow);
+                if (selected_object is CubeController) {
+
+                    (selected_object as CubeController).MoveTo(new_positional_ray.GetPoint(starting_distance_to_selected_object));
+
+
+                }
+
+
+                else if (selected_object is SphereController) {
+
+                    (selected_object as SphereController).MoveTo(new_positional_ray.GetPoint(starting_distance_to_selected_object));
+
+
+                }
+
+                else if (selected_object is CapsuleController) {
+
+                    (selected_object as CapsuleController).MoveTo(new_positional_ray.GetPoint(starting_distance_to_selected_object));
+                }
+
+                
+
             }
+
+
 
         }
     }
@@ -53,7 +71,6 @@ public class TouchManager : MonoBehaviour, ITouchController
 
     public void tap(Vector2 position)
     {
-        print("Im the manager and I recieved a tap from gesture");
 
         Ray our_ray = Camera.main.ScreenPointToRay(position);
         Debug.DrawRay(our_ray.origin, our_ray.direction * 50, Color.red, 4f);
@@ -61,78 +78,89 @@ public class TouchManager : MonoBehaviour, ITouchController
         if (Physics.Raycast(our_ray, out hit_info))
         {
             IInteractable the_object = hit_info.transform.GetComponent<IInteractable>();
-          //  the_object.select_toggle();
+
+            if (selected_object != null)
+                selected_object.select_toggle();
+
+            the_object.select_toggle();
             selected_object = the_object;
 
 
-
             if (the_object is CubeController)
-            {
-                the_object.select_toggle(Color.red);
+            { (the_object as CubeController).Do_cube_stuff(); }
 
-            }
+
+
             else if (the_object is SphereController)
-            {
-                the_object.select_toggle(Color.blue);
+            { (the_object as CubeController).Do_cube_stuff(); }
 
-            }
 
             else if (the_object is CapsuleController)
             {
-                the_object.select_toggle(Color.green);
+                (the_object as CubeController).Do_cube_stuff();
             }
 
-        }
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        managers = FindObjectsOfType<MonoBehaviour>().OfType<ITouchController>().ToArray();
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if (Input.touchCount > 0)
-        {
-
-            tap_timer += Time.deltaTime;
-            Touch[] all_touches = Input.touches;
-            Touch first_touch = all_touches[0];
-            print(first_touch.phase);
-
-            switch (first_touch.phase)
+            else
             {
-                case TouchPhase.Began:
-                   startPos = first_touch.position;
-                    tap_timer = 0f;
-                    has_moved = false;  
-                    break;
-                case TouchPhase.Stationary:
-
-
-                    break;
-                case TouchPhase.Moved:
-                    direction = first_touch.position - startPos;
-                    has_moved = true;
-                    foreach (ITouchController manager in managers)
-                        (manager as ITouchController).drag(first_touch.position);
-                    break;
-
-                case TouchPhase.Ended:
-                    if ((tap_timer < MAX_ALLOWED_TAP_TIME) && !has_moved)
-                    {
-                        foreach (ITouchController manager in managers)
-                            (manager as ITouchController).tap(first_touch.position);
-                    }
-                    break;
-
+                selected_object.select_toggle();
+                selected_object = null;
             }
+        }
+    }
+        // Start is called before the first frame update
+        void Start()
+        {
+            managers = FindObjectsOfType<MonoBehaviour>().OfType<ITouchController>().ToArray();
 
         }
 
+        // Update is called once per frame
+        void Update()
+        {
+            if (Input.touchCount > 0)
+            {
+                tap_timer += Time.deltaTime;
+                Touch[] all_touches = Input.touches;
+                Touch first_touch = all_touches[0];
+                print(first_touch.phase);
 
-    }
+                switch (first_touch.phase)
+                {
+                    case TouchPhase.Began:
+                        tap_timer = 0f;
+                        has_moved = false;
+
+                        break;
+                    case TouchPhase.Stationary:
+
+
+                        break;
+                    case TouchPhase.Moved:
+                        has_moved = true;
+
+
+                        if (has_moved == true)
+                        {
+                            foreach (ITouchController manager in managers)
+                                (manager as ITouchController).drag(first_touch.position);
+
+                        }
+                        break;
+
+                    case TouchPhase.Ended:
+                        if ((tap_timer < MAX_ALLOWED_TAP_TIME) && !has_moved)
+                        {
+                            foreach (ITouchController manager in managers)
+                                (manager as ITouchController).tap(first_touch.position);
+                        }
+                        break;
+
+                }
+
+            }
+
+
+        }
+
+    
 }

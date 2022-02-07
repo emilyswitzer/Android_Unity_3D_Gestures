@@ -5,14 +5,17 @@ using UnityEngine;
 
 public class CapsuleController : MonoBehaviour,IInteractable
 {
+
+    [SerializeField, SerializeReference]
+    bool is_selected = false;
     Renderer my_renderer;
+    private Vector3 drag_position;
 
     // Start is called before the first frame update
     void Start()
     {
 
         my_renderer = GetComponent<Renderer>();
-
 
     }
 
@@ -24,17 +27,30 @@ public class CapsuleController : MonoBehaviour,IInteractable
 
     }
 
-    public void collision()
+    public void select_toggle()
     {
-        print("COLLIDED");
+        is_selected = !is_selected;
+
+        if (is_selected)
+        {
+            my_renderer.material.color = Color.red;
+
+        }
+        else
+            my_renderer.material.color = Color.white;
+
     }
-    //This is to change colour when selected - this needs to be automatically switched off when deselected
-    public void select_toggle(Color color)
+
+    internal void Do_cube_stuff()
     {
-      
-            my_renderer.material.SetColor("_Color", color);
-
-
+        print("Im a cube and Im OK");
     }
+
+    public void MoveTo(Vector3 destination)
+    {
+        drag_position = destination;
+        transform.position = Vector3.Lerp(transform.position, drag_position, 0.5f);
+    }
+
    
 }
