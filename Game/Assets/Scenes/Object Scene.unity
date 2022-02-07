@@ -331,6 +331,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c943cb02e145e5f48a177ef92cd4b169, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  is_selected: 0
 --- !u!1 &1164596692
 GameObject:
   m_ObjectHideFlags: 0
@@ -437,7 +438,7 @@ GameObject:
   - component: {fileID: 1222107440}
   - component: {fileID: 1222107439}
   - component: {fileID: 1222107438}
-  - component: {fileID: 1222107443}
+  - component: {fileID: 1222107444}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -523,7 +524,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1222107443
+--- !u!114 &1222107444
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -535,6 +536,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c16c64157ff09884496bc5548cf10eec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  is_selected: 0
 --- !u!1 &1588188860
 GameObject:
   m_ObjectHideFlags: 0
@@ -648,7 +650,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 163cac1c78ef52e40bbb344ed8fce48e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startPos: {x: 0, y: 0}
 --- !u!4 &1640098981
 Transform:
   m_ObjectHideFlags: 0
@@ -775,3 +776,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 177f334e993e45b4fa6527ed8198b6ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  is_selected: 0

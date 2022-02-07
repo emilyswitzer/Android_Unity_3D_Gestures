@@ -4,6 +4,7 @@ using UnityEngine;
 
 public interface IInteractable 
 {
-    void select_toggle(Color color);
-    void collision();
+    void select_toggle();
+   
+    void MoveTo(Vector3 destination);
 }
