@@ -8,7 +8,7 @@ public class TouchManager : MonoBehaviour, ITouchController
 {
     IInteractable selected_object;
     float starting_distance_to_selected_object;
-    bool drag_started = false;
+    bool is_dragging = false;
     private float tap_timer;
     private bool has_moved;
     private float MAX_ALLOWED_TAP_TIME = 0.2f;
@@ -25,11 +25,11 @@ public class TouchManager : MonoBehaviour, ITouchController
         if (selected_object != null)
         {
 
-            if (!drag_started)
+            if (!is_dragging)
             {
 
                 starting_distance_to_selected_object = Vector3.Distance(Camera.main.transform.position, (selected_object as MonoBehaviour).transform.position);
-                drag_started = true;
+                is_dragging = true;
             }
 
             Ray new_positional_ray = Camera.main.ScreenPointToRay(current_position);
@@ -58,7 +58,10 @@ public class TouchManager : MonoBehaviour, ITouchController
                 
 
             }
-
+            if(is_dragging && Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Ended)
+            {
+                is_dragging = false;
+            }
 
 
         }
