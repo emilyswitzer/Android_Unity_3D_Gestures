@@ -9,6 +9,10 @@ public class CubeController : MonoBehaviour,IInteractable
     bool is_selected = false;
     Renderer my_renderer;
     private Vector3 drag_position;
+    private Vector3 h;
+    private RaycastHit hit;
+    float distance;
+
 
     // Start is called before the first frame update
     void Start()
@@ -46,11 +50,20 @@ public class CubeController : MonoBehaviour,IInteractable
         print("Im a cube and Im OK");
     }
 
-    public void MoveTo(Vector3 destination)
+ /**   public void MoveTo(Vector3 destination)
     {
         drag_position = destination;
         transform.position = Vector3.Lerp(transform.position, drag_position, 0.5f);
     }
+ **/
+    public void drag_start()
+    {
+       // distance = Vector3.Distance(transform.position, Camera.main.transform.position);
+    }
 
-
+    public void drag_update(Ray r)
+    {
+       
+       // Physics.Raycast() = Vector3.Distance(transform.position, Camera.main.transform.position);
+    }
 }

@@ -27,13 +27,14 @@ public class TouchManager : MonoBehaviour, ITouchController
 
             if (!is_dragging)
             {
-
-                starting_distance_to_selected_object = Vector3.Distance(Camera.main.transform.position, (selected_object as MonoBehaviour).transform.position);
+                selected_object.drag_start();
+             //   starting_distance_to_selected_object = Vector3.Distance(Camera.main.transform.position, (selected_object as MonoBehaviour).transform.position);
                 is_dragging = true;
+                
             }
 
-            Ray new_positional_ray = Camera.main.ScreenPointToRay(current_position);
-
+            selected_object.drag_update(ourRay);
+            /**
             {
                 if (selected_object is CubeController) {
 
@@ -57,8 +58,8 @@ public class TouchManager : MonoBehaviour, ITouchController
 
                 
 
-            }
-            if(is_dragging && Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Ended)
+            } **/
+            if (is_dragging && Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Ended)
             {
                 is_dragging = false;
             }
