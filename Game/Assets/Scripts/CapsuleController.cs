@@ -6,7 +6,6 @@ using UnityEngine;
 public class CapsuleController : MonoBehaviour,IInteractable
 {
 
-    [SerializeField, SerializeReference]
     bool is_selected = false;
     Renderer my_renderer;
     private Vector3 drag_position;
@@ -33,7 +32,8 @@ public class CapsuleController : MonoBehaviour,IInteractable
 
         if (is_selected)
         {
-            my_renderer.material.color = Color.red;
+            print("CAPSULE SELECTED");
+            // my_renderer.material.color = Color.red;
 
         }
         else
