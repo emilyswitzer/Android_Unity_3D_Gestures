@@ -7,7 +7,6 @@ using System.Linq;
 public class TouchManager : MonoBehaviour, ITouchController
 {
     IInteractable selected_object;
-    float starting_distance_to_selected_object;
     bool is_dragging = false;
     private float tap_timer;
     private bool has_moved;
@@ -28,37 +27,12 @@ public class TouchManager : MonoBehaviour, ITouchController
             if (!is_dragging)
             {
                 selected_object.drag_start();
-             //   starting_distance_to_selected_object = Vector3.Distance(Camera.main.transform.position, (selected_object as MonoBehaviour).transform.position);
                 is_dragging = true;
                 
             }
 
             selected_object.drag_update(ourRay);
-            /**
-            {
-                if (selected_object is CubeController) {
-
-                    (selected_object as CubeController).MoveTo(new_positional_ray.GetPoint(starting_distance_to_selected_object));
-
-
-                }
-
-
-                else if (selected_object is SphereController) {
-
-                    (selected_object as SphereController).MoveTo(new_positional_ray.GetPoint(starting_distance_to_selected_object));
-
-
-                }
-
-                else if (selected_object is CapsuleController) {
-
-                    (selected_object as CapsuleController).MoveTo(new_positional_ray.GetPoint(starting_distance_to_selected_object));
-                }
-
-                
-
-            } **/
+           
             if (is_dragging && Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Ended)
             {
                 is_dragging = false;
@@ -66,6 +40,12 @@ public class TouchManager : MonoBehaviour, ITouchController
 
 
         }
+    }
+
+    public void drag_ended()
+    {
+        if (selected_object != null)
+            selected_object.drag_end();
     }
 
     public void pinch(Vector2 position_1, Vector2 position_2, float relative_distance)
@@ -157,7 +137,9 @@ public class TouchManager : MonoBehaviour, ITouchController
                             foreach (ITouchController manager in managers)
                                 (manager as ITouchController).tap(first_touch.position);
                         }
-                        break;
+                         foreach (ITouchController manager in managers)
+                          (manager as ITouchController).drag_ended();
+                    break;
 
                 }
 

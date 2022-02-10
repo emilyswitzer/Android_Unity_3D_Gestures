@@ -48,11 +48,10 @@ public class CapsuleController : MonoBehaviour,IInteractable
         print("Im a cube and Im OK");
     }
 
-  /**  public void MoveTo(Vector3 destination)
+    public void drag_end()
     {
-        drag_position = destination;
-        transform.position = Vector3.Lerp(transform.position, drag_position, 0.5f);
-    }**/
+        
+    }
 
     public void drag_start()
     {

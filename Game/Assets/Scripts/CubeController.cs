@@ -11,6 +11,7 @@ public class CubeController : MonoBehaviour,IInteractable
     private Vector3 drag_position;
     private Vector3 h;
     private RaycastHit hit;
+    GameObject cameraPlane;
     float distance;
 
 
@@ -19,7 +20,7 @@ public class CubeController : MonoBehaviour,IInteractable
     {
 
         my_renderer = GetComponent<Renderer>();
-
+      
     }
 
     // Update is called once per frame
@@ -50,20 +51,17 @@ public class CubeController : MonoBehaviour,IInteractable
         print("Im a cube and Im OK");
     }
 
- /**   public void MoveTo(Vector3 destination)
+    public void drag_end()
     {
-        drag_position = destination;
-        transform.position = Vector3.Lerp(transform.position, drag_position, 0.5f);
     }
- **/
+
+
     public void drag_start()
     {
-       // distance = Vector3.Distance(transform.position, Camera.main.transform.position);
     }
 
     public void drag_update(Ray r)
     {
-       
-       // Physics.Raycast() = Vector3.Distance(transform.position, Camera.main.transform.position);
+        
     }
 }

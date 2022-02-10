@@ -10,12 +10,14 @@ public class SphereController : MonoBehaviour, IInteractable
     Renderer my_renderer;
     private Vector3 drag_position;
     float distance;
+    GameObject cameraPlane;
 
     // Start is called before the first frame update
     void Start()
     {
 
         my_renderer = GetComponent<Renderer>();
+        
 
     }
 
@@ -47,19 +49,30 @@ public class SphereController : MonoBehaviour, IInteractable
         print("Im a cube and Im OK");
     }
 
-  /**  public void MoveTo(Vector3 destination)
-    {
-        drag_position = destination;
-        transform.position = Vector3.Lerp(transform.position, drag_position, 0.5f);
-    } **/
 
     public void drag_start()
     {
-        distance = Vector3.Distance(transform.position, Camera.main.transform.position);
+        cameraPlane = GameObject.CreatePrimitive(PrimitiveType.Plane);
+        cameraPlane.transform.position = new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, transform.position.z);
+        cameraPlane.transform.up = (Camera.main.transform.position - cameraPlane.transform.position).normalized;
+        cameraPlane.GetComponent<Renderer>().enabled = false;
     }
 
+    public void drag_end()
+    {
+        Destroy(cameraPlane);
+    }
     public void drag_update(Ray r)
     {
-        transform.position = r.GetPoint(distance);
+        RaycastHit info;
+
+        if (Physics.Raycast(r, out info))
+        {
+         if (info.transform == cameraPlane.transform)
+            {
+                Vector3 hit = info.point;
+                transform.position = hit;
+            }
+        }
     }
 }
