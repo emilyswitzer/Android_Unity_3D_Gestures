@@ -3,14 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/**This is the drag along the vertical plane **/
 public class SphereController : MonoBehaviour, IInteractable
 {
   
     bool is_selected = false;
     Renderer my_renderer;
-    private Vector3 drag_position;
-    float distance;
-    GameObject cameraPlane;
+    GameObject camera_plane;
 
     // Start is called before the first frame update
     void Start()
@@ -52,15 +51,15 @@ public class SphereController : MonoBehaviour, IInteractable
 
     public void drag_start()
     {
-        cameraPlane = GameObject.CreatePrimitive(PrimitiveType.Plane);
-        cameraPlane.transform.position = new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, transform.position.z);
-        cameraPlane.transform.up = (Camera.main.transform.position - cameraPlane.transform.position).normalized;
-        cameraPlane.GetComponent<Renderer>().enabled = false;
+        camera_plane = GameObject.CreatePrimitive(PrimitiveType.Plane);
+        camera_plane.transform.position = new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, transform.position.z);
+        camera_plane.transform.up = (Camera.main.transform.position - camera_plane.transform.position).normalized;
+        camera_plane.GetComponent<Renderer>().enabled = false;
     }
 
     public void drag_end()
     {
-        Destroy(cameraPlane);
+        Destroy(camera_plane);
     }
     public void drag_update(Ray r)
     {
@@ -68,7 +67,7 @@ public class SphereController : MonoBehaviour, IInteractable
 
         if (Physics.Raycast(r, out info))
         {
-         if (info.transform == cameraPlane.transform)
+         if (info.transform == camera_plane.transform)
             {
                 Vector3 hit = info.point;
                 transform.position = hit;

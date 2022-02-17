@@ -3,12 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/**This is the drag that follows the raycast **/
 public class CapsuleController : MonoBehaviour,IInteractable
 {
 
     bool is_selected = false;
     Renderer my_renderer;
-    private Vector3 drag_position;
     float distance;
 
 

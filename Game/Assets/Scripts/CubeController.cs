@@ -3,24 +3,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CubeController : MonoBehaviour,IInteractable
+/**This is the drag along the ground plane **/
+public class CubeController : MonoBehaviour, IInteractable
 {
  
     bool is_selected = false;
     Renderer my_renderer;
-    private Vector3 drag_position;
-    private Vector3 h;
-    private RaycastHit hit;
-    GameObject cameraPlane;
-    float distance;
-
+    LayerMask plane;
 
     // Start is called before the first frame update
     void Start()
     {
 
         my_renderer = GetComponent<Renderer>();
-      
+        plane = LayerMask.GetMask("Plane");
+
     }
 
     // Update is called once per frame
@@ -48,7 +45,7 @@ public class CubeController : MonoBehaviour,IInteractable
 
     internal void Do_cube_stuff()
     {
-        print("Im a cube and Im OK");
+       
     }
 
     public void drag_end()
@@ -58,10 +55,22 @@ public class CubeController : MonoBehaviour,IInteractable
 
     public void drag_start()
     {
+        
     }
 
     public void drag_update(Ray r)
     {
-        
+        RaycastHit info;
+
+        if (Physics.Raycast(r, out info, 100.0f, plane))
+        {
+
+            if (info.transform && is_selected == true)
+            {
+
+                transform.position = info.point + info.normal * 0.5f;
+            }
+        }
+
     }
 }
