@@ -3,19 +3,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/**This is the drag along the vertical plane **/
 public class SphereController : MonoBehaviour, IInteractable
 {
   
     bool is_selected = false;
     Renderer my_renderer;
-    private Vector3 drag_position;
-    float distance;
+    GameObject camera_plane;
 
     // Start is called before the first frame update
     void Start()
     {
 
         my_renderer = GetComponent<Renderer>();
+        
 
     }
 
@@ -47,19 +48,30 @@ public class SphereController : MonoBehaviour, IInteractable
         print("Im a cube and Im OK");
     }
 
-  /**  public void MoveTo(Vector3 destination)
-    {
-        drag_position = destination;
-        transform.position = Vector3.Lerp(transform.position, drag_position, 0.5f);
-    } **/
 
     public void drag_start()
     {
-        distance = Vector3.Distance(transform.position, Camera.main.transform.position);
+        camera_plane = GameObject.CreatePrimitive(PrimitiveType.Plane);
+        camera_plane.transform.position = new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, transform.position.z);
+        camera_plane.transform.up = (Camera.main.transform.position - camera_plane.transform.position).normalized;
+        camera_plane.GetComponent<Renderer>().enabled = false;
     }
 
+    public void drag_end()
+    {
+        Destroy(camera_plane);
+    }
     public void drag_update(Ray r)
     {
-        transform.position = r.GetPoint(distance);
+        RaycastHit info;
+
+        if (Physics.Raycast(r, out info))
+        {
+         if (info.transform == camera_plane.transform)
+            {
+                Vector3 hit = info.point;
+                transform.position = hit;
+            }
+        }
     }
 }
