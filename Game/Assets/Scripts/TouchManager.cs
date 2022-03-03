@@ -15,7 +15,14 @@ public class TouchManager : MonoBehaviour, ITouchController
     float touchDist = 0;
     float lastDist = 0;
 
-    
+    GameObject ourCameraPlane;
+    Quaternion startOrientation;
+    Vector3 scale;
+    bool hasMoved = false;
+    float startDistance;
+    float startAngle;
+
+
     public void drag(Vector2 current_position)
     {
 
@@ -112,7 +119,19 @@ public class TouchManager : MonoBehaviour, ITouchController
         void Start()
         {
             managers = FindObjectsOfType<MonoBehaviour>().OfType<ITouchController>().ToArray();
-       
+        ourCameraPlane = GameObject.CreatePrimitive(PrimitiveType.Plane);
+        ourCameraPlane.transform.position = new Vector3(transform.position.x, Camera.main.transform.position.y, transform.position.z);
+        ourCameraPlane.transform.up = (Camera.main.transform.position - ourCameraPlane.transform.position).normalized;
+
+        //third method
+        ourCameraPlane.transform.eulerAngles = new Vector3(ourCameraPlane.transform.eulerAngles.x + 42,
+                                                ourCameraPlane.transform.eulerAngles.y,
+                                                ourCameraPlane.transform.eulerAngles.z);
+
+        ourCameraPlane.transform.position = new Vector3(ourCameraPlane.transform.position.x,
+                                                ourCameraPlane.transform.position.y - 1.1f,
+                                                ourCameraPlane.transform.position.z);
+
 
     }
 
@@ -163,30 +182,73 @@ public class TouchManager : MonoBehaviour, ITouchController
 
 
         }
-       else if (Input.touchCount == 2)
-        {
-            tap_timer += Time.deltaTime;
-            Touch[] all_touches = Input.touches;
-            Touch first_touch = all_touches[0];
-            Touch second_touch = all_touches[1];
 
-            if (first_touch.phase == TouchPhase.Began && second_touch.phase == TouchPhase.Began)
+        else if (Input.touchCount == 2)
+        {
+            if (Input.touches[0].phase == TouchPhase.Began || Input.touches[1].phase == TouchPhase.Began)
             {
-                lastDist = Vector2.Distance(first_touch.position, second_touch.position);
+                Vector2 touch0 = Input.GetTouch(0).position;
+                Vector2 touch1 = Input.GetTouch(1).position;
+
+                startDistance = Vector3.Distance(touch0, touch1);
+                startAngle = Mathf.Atan2(touch1.x - touch0.x, touch1.y - touch0.y);
+
+                if (selected_object != null)
+                {
+                    startOrientation = selected_object.gameObject.transform.rotation;
+                    scale = selected_object.gameObject.transform.localScale;
+                    scale = selected_object.gameObject.transform.localScale;
+                }
+
+                else
+                {
+                    startOrientation = Camera.main.transform.rotation;
+                    scale = Camera.main.transform.localScale;
+                }
             }
 
-            if (first_touch.phase == TouchPhase.Moved && second_touch.phase == TouchPhase.Moved)
+            else if (Input.touches[0].phase == TouchPhase.Moved || Input.touches[1].phase == TouchPhase.Moved)
             {
-                float newDist = Vector2.Distance(first_touch.position, second_touch.position);
-                touchDist = lastDist - newDist;
-                lastDist = newDist;
+                Vector2 touch0 = Input.GetTouch(0).position;
+                Vector2 touch1 = Input.GetTouch(1).position;
+                float endDistance = Vector2.Distance(touch0, touch1);
+                float diff = endDistance / startDistance;
+                float latestAngle = Mathf.Atan2(touch1.x - touch0.x, touch1.y - touch0.y);
+                float actualAngle = latestAngle - startAngle;
+                float rotationDegrees = Mathf.Rad2Deg * actualAngle;
 
-              
-                Camera.main.fieldOfView += touchDist * 0.1f;
+                if (selected_object == null)
+                {
+                    if (Quaternion.Angle(startOrientation, startOrientation * Quaternion.AngleAxis(rotationDegrees, Camera.main.transform.forward)) > 15)
+                    {
+                        print("Rotate camera");
+                        Camera.main.transform.rotation = startOrientation * Quaternion.AngleAxis(rotationDegrees, Camera.main.transform.forward);
+                    }
+
+                    else
+                    {
+                        print("Scale camera");
+                        diff = endDistance - startDistance;
+                        Camera.main.transform.position += (diff / 1000) * transform.forward;
+                    }
+                }
+
+                else
+                {
+                    if (Quaternion.Angle(startOrientation, startOrientation * Quaternion.AngleAxis(rotationDegrees, Camera.main.transform.forward)) > 15)
+                    {
+                        print("Rotate object");
+                        selected_object.gameObject.transform.rotation = startOrientation * Quaternion.AngleAxis(rotationDegrees, Camera.main.transform.forward);
+                    }
+
+                    else
+                    {
+                        print("Scale Object");
+                        selected_object.gameObject.transform.localScale = scale * diff;
+                    }
+                }
             }
         }
-
-
 
 
     }
