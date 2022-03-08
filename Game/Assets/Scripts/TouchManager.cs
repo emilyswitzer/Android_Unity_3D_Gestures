@@ -121,6 +121,7 @@ public class TouchManager : MonoBehaviour, ITouchController
         managers = FindObjectsOfType<MonoBehaviour>().OfType<ITouchController>().ToArray();
         ourCameraPlane = GameObject.CreatePrimitive(PrimitiveType.Plane);
         ourCameraPlane.transform.position = new Vector3(transform.position.x, Camera.main.transform.position.y, transform.position.z);
+        //comment
         //ourCameraPlane.transform.up = (Camera.main.transform.position - ourCameraPlane.transform.position).normalized;
 
         ourCameraPlane.transform.eulerAngles = new Vector3(ourCameraPlane.transform.eulerAngles.x + 42,
