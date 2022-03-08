@@ -118,12 +118,12 @@ public class TouchManager : MonoBehaviour, ITouchController
         // Start is called before the first frame update
         void Start()
         {
-            managers = FindObjectsOfType<MonoBehaviour>().OfType<ITouchController>().ToArray();
+        managers = FindObjectsOfType<MonoBehaviour>().OfType<ITouchController>().ToArray();
         ourCameraPlane = GameObject.CreatePrimitive(PrimitiveType.Plane);
         ourCameraPlane.transform.position = new Vector3(transform.position.x, Camera.main.transform.position.y, transform.position.z);
-        ourCameraPlane.transform.up = (Camera.main.transform.position - ourCameraPlane.transform.position).normalized;
+        //comment
+        //ourCameraPlane.transform.up = (Camera.main.transform.position - ourCameraPlane.transform.position).normalized;
 
-        //third method
         ourCameraPlane.transform.eulerAngles = new Vector3(ourCameraPlane.transform.eulerAngles.x + 42,
                                                 ourCameraPlane.transform.eulerAngles.y,
                                                 ourCameraPlane.transform.eulerAngles.z);
