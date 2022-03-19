@@ -34,8 +34,7 @@ public class CubeController : MonoBehaviour, IInteractable
 
         if (is_selected)
         {
-            print("CUBE SELECTED");
-            //my_renderer.material.color = Color.red;
+           my_renderer.material.color = Color.red;
 
         }
         else
@@ -45,13 +44,15 @@ public class CubeController : MonoBehaviour, IInteractable
 
     internal void Do_cube_stuff()
     {
-       
+        print("cube selected");
     }
 
     public void drag_end()
     {
+
     }
 
+    
 
     public void drag_start()
     {

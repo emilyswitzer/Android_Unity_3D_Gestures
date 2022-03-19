@@ -10,5 +10,6 @@ public interface IInteractable
     void drag_start();
     void drag_update(Ray r);
     GameObject gameObject { get; }
+  
 
 }

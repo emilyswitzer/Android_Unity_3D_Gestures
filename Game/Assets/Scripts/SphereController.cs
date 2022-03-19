@@ -28,14 +28,15 @@ public class SphereController : MonoBehaviour, IInteractable
 
     }
 
+
     public void select_toggle()
     {
         is_selected = !is_selected;
 
         if (is_selected)
         {
-            print("SPHERE SELECTED");
-          //  my_renderer.material.color = Color.red;
+             my_renderer.material.color = Color.red;
+
 
         }
         else
@@ -45,7 +46,7 @@ public class SphereController : MonoBehaviour, IInteractable
 
     internal void Do_cube_stuff()
     {
-        print("Im a cube and Im OK");
+        print("sphere selected");
     }
 
 
@@ -60,6 +61,8 @@ public class SphereController : MonoBehaviour, IInteractable
     public void drag_end()
     {
         Destroy(camera_plane);
+       
+
     }
     public void drag_update(Ray r)
     {

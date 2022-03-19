@@ -12,6 +12,14 @@ public interface ITouchController
 
     void drag_ended();
 
-   
+    void verticalDrag(float position);
+
+    void startRotateScale();
+
+    void rotateScale(float rotationDegrees, float endDistance, float diff);
+
+
+
+
 
 }
