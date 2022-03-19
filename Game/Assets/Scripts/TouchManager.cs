@@ -10,7 +10,6 @@ public class TouchManager : MonoBehaviour, ITouchController
     bool is_dragging = false;
     private float tap_timer;
     private bool has_moved;
-    private bool cam_moved;
     private float MAX_ALLOWED_TAP_TIME = 0.2f;
     ITouchController[] managers;
     GameObject ourCameraPlane;
@@ -18,8 +17,6 @@ public class TouchManager : MonoBehaviour, ITouchController
     Vector3 scale;
     float startDistance;
     float startAngle;
-    Vector3 originalCamPosition;
-    Quaternion originalCamRotation;
 
     public void drag(Vector2 current_position)
     {
@@ -171,31 +168,18 @@ public class TouchManager : MonoBehaviour, ITouchController
     }
 
 
-    public void verticalDrag(float touchPos)
+    public void verticalDrag(float touchPos, Touch touch, Touch touch1)
     {
-        Touch touch = Input.touches[0];
-        Touch touchOne = Input.touches[1];
-
-        if (touch.phase == TouchPhase.Ended || touch.phase == TouchPhase.Canceled
-        || touchOne.phase == TouchPhase.Ended || touchOne.phase == TouchPhase.Canceled)
-        {
-            return;
-        }
-        if (touch.phase == TouchPhase.Began || touchOne.phase == TouchPhase.Began)
-        {
-
-        }
-        else
-        {
+       
             print("Veritcal drag camera");
-            Camera.main.transform.eulerAngles += new Vector3((touch.deltaPosition.y + touchOne.deltaPosition.y) / 5, (touch.deltaPosition.x + touchOne.deltaPosition.x) / 5, 0);
-        }
+            Camera.main.transform.eulerAngles += new Vector3((touch.deltaPosition.y + touch1.deltaPosition.y) / 5, (touch.deltaPosition.x + touch1.deltaPosition.x) / 5, 0);
+        
     }
 
-    public void moveCam(float pinchDistance)
+    public void moveCam(float distance)
     {
         print("Move camera");
-        Camera.main.transform.position += Vector3.forward * (pinchDistance) * 0.1f;
+        Camera.main.transform.position += Vector3.forward * (distance) * 0.1f;
     }
     // Start is called before the first frame update
     void Start()
@@ -213,8 +197,7 @@ public class TouchManager : MonoBehaviour, ITouchController
                                                 ourCameraPlane.transform.position.y - 1.1f,
                                                 ourCameraPlane.transform.position.z);
 
-        originalCamPosition = Camera.main.transform.position;
-         originalCamRotation = Camera.main.transform.rotation;
+       
 
 
     }
@@ -290,8 +273,7 @@ public class TouchManager : MonoBehaviour, ITouchController
                     (manager as ITouchController).startRotateScale();
                 
             }
-
-            else if (first_touch.phase == TouchPhase.Began && second_touch.phase == TouchPhase.Moved)
+            else if (first_touch.phase == TouchPhase.Stationary && second_touch.phase == TouchPhase.Moved)
             {
                 Vector2 touch0 = Input.GetTouch(0).position;
                 Vector2 touch1 = Input.GetTouch(1).position;
@@ -305,6 +287,8 @@ public class TouchManager : MonoBehaviour, ITouchController
 
 
             }
+
+
             else 
             {
                 Touch touch = Input.touches[0];
@@ -314,8 +298,9 @@ public class TouchManager : MonoBehaviour, ITouchController
                                                       touchOne.position - touchOne.deltaPosition);
                 float distance = Vector2.Distance(touch.position, touchOne.position);
 
-                moveCam(distance - prevDistance);
-                verticalDrag(initialtouchpos);
+               moveCam(distance - prevDistance);
+           
+               verticalDrag(initialtouchpos,touch, touchOne);
 
             }
 
@@ -373,11 +358,7 @@ public class TouchManager : MonoBehaviour, ITouchController
     }
 
 
-    public void ResetCameraPosition()
-    {
-        Camera.main.transform.position = originalCamPosition;
-        Camera.main.transform.rotation = originalCamRotation;
-    }
+   
 
 
 }
