@@ -34,8 +34,8 @@ public class CapsuleController : MonoBehaviour,IInteractable
 
         if (is_selected)
         {
-            print("CAPSULE SELECTED");
-            // my_renderer.material.color = Color.red;
+            
+            my_renderer.material.color = Color.red;
 
         }
         else
@@ -45,13 +45,14 @@ public class CapsuleController : MonoBehaviour,IInteractable
 
     internal void Do_cube_stuff()
     {
-        print("Im a cube and Im OK");
+        print("capsule selected");
     }
 
     public void drag_end()
     {
         
     }
+
 
     public void drag_start()
     {
