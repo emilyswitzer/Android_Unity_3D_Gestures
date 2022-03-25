@@ -34,15 +34,15 @@ public class TouchManager : MonoBehaviour, ITouchController
             {
                 selected_object.drag_start();
                 is_dragging = true;
-                
+
             }
 
             selected_object.drag_update(ourRay);
-           
+
             if (is_dragging && Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Ended)
             {
                 is_dragging = false;
-                
+
             }
 
 
@@ -55,12 +55,12 @@ public class TouchManager : MonoBehaviour, ITouchController
         if (selected_object != null)
         {
             selected_object.drag_end();
-          
+
         }
-            
+
     }
 
- 
+
 
     public void rotateScale(float rotationDegrees, float endDistance, float diff)
     {
@@ -74,7 +74,7 @@ public class TouchManager : MonoBehaviour, ITouchController
 
             else
             {
-                print("Scale camera");
+                print("Zoom camera");
                 diff = endDistance - startDistance;
                 Camera.main.transform.position += (diff / 1000) * transform.forward;
             }
@@ -115,7 +115,7 @@ public class TouchManager : MonoBehaviour, ITouchController
 
             selected_object = the_object;
             the_object.select_toggle();
-            
+
 
 
             if (the_object is CubeController)
@@ -148,7 +148,7 @@ public class TouchManager : MonoBehaviour, ITouchController
         RaycastHit hit_info;
         if (Physics.Raycast(our_ray, out hit_info))
         {
-            print("hold & reset camera");
+            print("double tap");
             resetCamera();
 
         }
@@ -158,21 +158,21 @@ public class TouchManager : MonoBehaviour, ITouchController
 
     public void moveCameraAcross(float touchPos, Touch touch, Touch touch1)
     {
-       
-            print("Move Camera across");
-            Camera.main.transform.eulerAngles += new Vector3((touch.deltaPosition.y + touch1.deltaPosition.y) / 5, (touch.deltaPosition.x + touch1.deltaPosition.x) / 5, 0);
-        
+
+        print("Move camera");
+        Camera.main.transform.eulerAngles += new Vector3((touch.deltaPosition.y + touch1.deltaPosition.y) / 5, (touch.deltaPosition.x + touch1.deltaPosition.x) / 5, 0);
+
     }
     public void oneFingerMoveCam(float touchPos, Touch touch)
     {
 
-        print("Move Camera across");
+        print("One finger move camera");
         Camera.main.transform.eulerAngles += new Vector3((touch.deltaPosition.y) / 5, (touch.deltaPosition.x) / 5, 0);
 
     }
-    public void zoomCamera(float distance)
+    public void moveCamForwardBack(float distance)
     {
-        print("Camera Zoom");
+        print("Move camera");
         Camera.main.transform.position += Vector3.forward * (distance) * 0.1f;
     }
     // Start is called before the first frame update
@@ -181,15 +181,9 @@ public class TouchManager : MonoBehaviour, ITouchController
         managers = FindObjectsOfType<MonoBehaviour>().OfType<ITouchController>().ToArray();
         ourCameraPlane = GameObject.CreatePrimitive(PrimitiveType.Plane);
         ourCameraPlane.transform.position = new Vector3(transform.position.x, Camera.main.transform.position.y, transform.position.z);
-      
-
-        ourCameraPlane.transform.eulerAngles = new Vector3(ourCameraPlane.transform.eulerAngles.x + 43,
-                                                ourCameraPlane.transform.eulerAngles.y,
-                                                ourCameraPlane.transform.eulerAngles.z);
-
-
         position = Camera.main.transform.position;
         rotation = Camera.main.transform.rotation;
+        ourCameraPlane.transform.eulerAngles = new Vector3(ourCameraPlane.transform.eulerAngles.x + 60, ourCameraPlane.transform.eulerAngles.y, ourCameraPlane.transform.eulerAngles.z);
 
 
     }
@@ -263,22 +257,23 @@ public class TouchManager : MonoBehaviour, ITouchController
 
         }
 
-       else if (Input.touchCount == 1 && selected_object == null) { 
-          Touch touch = Input.touches[0];
-          Touch touchOne = Input.touches[1];
-          float initialtouchpos = touch.position.y;
-          moveCameraAcross(initialtouchpos, touch, touchOne);
+        else if (Input.touchCount == 1 && selected_object == null)
+        {
+            Touch touch = Input.touches[0];
+            Touch touchOne = Input.touches[1];
+            float initialtouchpos = touch.position.y;
+            moveCameraAcross(initialtouchpos, touch, touchOne);
 
         }
         if (Input.touchCount == 2 && selected_object == null)
         {
 
             Touch[] all_touches = Input.touches;
-            Touch first_touch = all_touches[0];
-            Touch second_touch = all_touches[1];
+            Touch touch = all_touches[0];
+            Touch touchOne = all_touches[1];
 
 
-            if (first_touch.phase == TouchPhase.Began || second_touch.phase == TouchPhase.Began)
+            if (touch.phase == TouchPhase.Began || touchOne.phase == TouchPhase.Began)
             {
                 Vector2 touch0 = Input.GetTouch(0).position;
                 Vector2 touch1 = Input.GetTouch(1).position;
@@ -286,10 +281,10 @@ public class TouchManager : MonoBehaviour, ITouchController
                 startAngle = Mathf.Atan2(touch1.x - touch0.x, touch1.y - touch0.y);
                 startOrientation = Camera.main.transform.rotation;
                 scale = Camera.main.transform.localScale;
-           
-                
+
+
             }
-            else if (first_touch.phase == TouchPhase.Stationary && second_touch.phase == TouchPhase.Moved)
+            else if (touch.phase == TouchPhase.Stationary && touchOne.phase == TouchPhase.Moved)
             {
                 Vector2 touch0 = Input.GetTouch(0).position;
                 Vector2 touch1 = Input.GetTouch(1).position;
@@ -305,18 +300,14 @@ public class TouchManager : MonoBehaviour, ITouchController
             }
 
 
-            else 
+            else
             {
-                Touch touch = Input.touches[0];
-                Touch touchOne = Input.touches[1];
                 float initialtouchpos = touch.position.y;
                 float prevDistance = Vector2.Distance(touch.position - touch.deltaPosition,
                                                       touchOne.position - touchOne.deltaPosition);
                 float distance = Vector2.Distance(touch.position, touchOne.position);
-
-               zoomCamera(distance - prevDistance);
-           
-               moveCameraAcross(initialtouchpos,touch, touchOne);
+                moveCamForwardBack(distance - prevDistance);
+                moveCameraAcross(initialtouchpos, touch, touchOne);
 
             }
 
@@ -343,7 +334,7 @@ public class TouchManager : MonoBehaviour, ITouchController
                 float endDistance = Vector2.Distance(touch0, touch1);
                 float diff = endDistance / startDistance;
                 float latestAngle = Mathf.Atan2(touch1.x - touch0.x, touch1.y - touch0.y);
-                float actualAngle =  startAngle - latestAngle;
+                float actualAngle = startAngle - latestAngle;
                 float rotationDegrees = Mathf.Rad2Deg * actualAngle;
                 foreach (ITouchController manager in managers)
                     (manager as ITouchController).rotateScale(rotationDegrees, endDistance, diff);
@@ -379,7 +370,7 @@ public class TouchManager : MonoBehaviour, ITouchController
         Camera.main.transform.rotation = rotation;
     }
 
-   
+
 
 
 }
