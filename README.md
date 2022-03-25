@@ -3,11 +3,11 @@
 To run create a new scene and a new empty object. Drag the ObjectGenerator script to the empty object.
 
 Gestures
-Tap: Tap an object to select the object. To unselect the object tap the object again,  tap another object or tap the plane. 
+Tap: Tap an object to select the object. To unselect the object tap another object or tap the plane. 
 
 Double-tap: Double tap on the plane to reset the camera position.
 
-Scale: To scale an object, select the object and scale up or down. If no object is selected the camera will zoom in/zoom out.
+Scale: To scale an object, select the object and use two fingers scale up or down. If no object is selected the camera will zoom in/zoom out.
 
 Drag: To drag an object it must be selected. Once selected it can be dragged. If no object is selected the camera will be dragged instead.
 
