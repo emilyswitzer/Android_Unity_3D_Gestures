@@ -54,6 +54,7 @@ public class SphereController : MonoBehaviour, IInteractable
     {
         camera_plane = GameObject.CreatePrimitive(PrimitiveType.Plane);
         camera_plane.transform.position = new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, transform.position.z);
+        camera_plane.transform.localScale = new Vector3(4, 4, 4);
         camera_plane.transform.up = (Camera.main.transform.position - camera_plane.transform.position).normalized;
         camera_plane.GetComponent<Renderer>().enabled = false;
     }
