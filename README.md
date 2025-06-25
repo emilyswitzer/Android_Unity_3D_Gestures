@@ -23,8 +23,5 @@ This Unity project demonstrates touch gesture controls for manipulating 3D objec
 - **Two Finger Drag:** Moves the camera when no object is selected.
 - **Rotate:** Rotate a selected object by keeping one finger stationary and moving the other. Same gesture rotates camera if no object is selected.
 
-## Demo
-*(Add a GIF or screenshot here)*
-
 ## License
 MIT License
